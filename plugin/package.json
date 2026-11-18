@@ -1,12 +1,13 @@
 {
-  "name": "magpie-wpt-import",
-  "version": "0.5.0",
-  "description": "在 magpie 的 WorkBuddy 登录方式里加一个「粘贴凭据登录」（仅供交流学习与逆向研究使用）",
+  "name": "magpie-workbuddy-import-plugin",
+  "version": "0.1.0",
+  "description": "把 WorkBuddy 的凭据（JSON / Cookie / 请求头 / API key）导入 magpie 的登录方式里（仅供交流学习与逆向研究使用）",
   "type": "module",
   "main": "./index.mjs",
   "exports": "./index.mjs",
   "files": [
     "index.mjs",
+    "community.mjs",
     "paste.mjs",
     "auth-store.js",
     "README.md"
@@ -18,16 +19,18 @@
     "magpie",
     "magpie-plugin",
     "workbuddy",
-    "codebuddy"
+    "codebuddy",
+    "credential",
+    "import"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fenyan5312/magpie-wpt.git",
+    "url": "git+https://github.com/iazhan/magpie-workbuddy-import.git",
     "directory": "plugin"
   },
-  "homepage": "https://github.com/fenyan5312/magpie-wpt#readme",
+  "homepage": "https://github.com/iazhan/magpie-workbuddy-import#readme",
   "bugs": {
-    "url": "https://github.com/fenyan5312/magpie-wpt/issues"
+    "url": "https://github.com/iazhan/magpie-workbuddy-import/issues"
   }
 }

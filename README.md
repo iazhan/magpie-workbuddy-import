@@ -1,6 +1,8 @@
-# magpie-wpt · 自用 wb 导入
+# magpie-workbuddy-import · WorkBuddy 凭据导入
 
-在 WorkBuddy 的登录方式里加一个「粘贴凭据登录」——凭据已经在手上时，不走浏览器，粘进插件自己开的窗口就行（手动输入也可以，不依赖剪贴板）。
+> 本仓库 fork 自 [fenyan5312/magpie-wpt](https://github.com/fenyan5312/magpie-wpt)：定位从「粘贴登录」改成「凭据导入」，并修好了容器里找不到社区插件的问题。上游原样保留 MIT 许可。
+
+把 WorkBuddy 的凭据（JSON、Cookie、请求头或 API key）导入 magpie 的登录方式里——凭据已经在手上时，不走浏览器，在插件自己开的窗口里粘进去或手动输入都行，不依赖剪贴板。
 
 > **仅供交流学习与逆向研究使用。** 本项目只做本地凭据格式转换与登录，不含任何绕过、代理、共享或转售能力。
 > 请只用于你自己的账号。使用产生的一切后果由使用者自负。
@@ -16,13 +18,13 @@ magpie → **供应商** → **WorkBuddy** → 「**添加另一个 WorkBuddy (C
   WorkBuddy account (browser)
   WorkBuddy desktop's sign-in
   WorkBuddy API key
-  粘贴凭据登录          ← 这个
+  导入凭据              ← 这个
 ```
 
 命令行同一个入口：
 
 ```bash
-magpie plugin login workbuddy 粘贴凭据登录
+magpie plugin login workbuddy 导入凭据
 ```
 
 ## 它怎么做到的（为什么不是自己注册一个插件）
@@ -39,7 +41,7 @@ const hooks = await WorkBuddyAuthPlugin(ctx);        // 社区插件的 config /
 return {
   ...hooks,
   auth: { ...hooks.auth,
-    methods: [...hooks.auth.methods, 粘贴凭据登录] }, // 在它后面追加，不替换
+    methods: [...hooks.auth.methods, 导入凭据] }, // 在它后面追加，不替换
 };
 ```
 
@@ -47,13 +49,23 @@ return {
 
 依赖：`@magpie-community/opencode-workbuddy-auth`（wb 的登录本来就要装它）。没装的话插件会明确报出来，并给出安装命令。
 
+它在哪都能找到它：magpie 把所有插件装进同一个 `plugins/node_modules`，本插件就从**自己所在的位置**往上找那个邻居，不看 `HOME`、也不猜 `~/.config`。容器里尤其要这样——官方镜像的 magpie 目录是 `$XDG_CONFIG_HOME/magpie`（`/config/magpie`），而 `HOME` 是 `/config/home`，按 `~/.config` 猜会猜到一个空目录，于是报“找不到 WorkBuddyAuthPlugin 导出”。万一还是找不到，报错会列出找过的每个路径和原因（没装 / 装了但这个版本没有该导出）。
+
 ## 安装
 
 ```bash
-git clone https://github.com/fenyan5312/magpie-wpt.git
-cd magpie-wpt
+git clone https://github.com/iazhan/magpie-workbuddy-import.git
+cd magpie-workbuddy-import
 magpie plugin add ./plugin
 magpie plugin use ./plugin workbuddy
+```
+
+从 npm 装（发版之后）：
+
+```bash
+magpie plugin add @magpie-community/opencode-workbuddy-auth@latest
+magpie plugin add magpie-workbuddy-import
+magpie plugin use magpie-workbuddy-import workbuddy
 ```
 
 `plugin use` 那一步是必须的：它让这个包装插件来服务 `workbuddy`（从而把四种方式一起交出去）。已经装过社区插件的话，它仍然会被加载，只是不再由它来服务。
@@ -62,7 +74,7 @@ magpie plugin use ./plugin workbuddy
 
 ## 用法
 
-点「粘贴凭据登录」之后，插件会在 `127.0.0.1` 上起一个临时页面并打开浏览器，长这样：
+点「导入凭据」之后，插件会在 `127.0.0.1` 上起一个临时页面并打开浏览器，长这样：
 
 ```
 填入凭据
@@ -168,4 +180,4 @@ magpie plugin use @magpie-community/opencode-workbuddy-auth@latest workbuddy
 
 ## 许可
 
-MIT，见 [LICENSE](LICENSE)。
+MIT，见 [LICENSE](LICENSE)。原项目 © 2026 fenyan5312（[magpie-wpt](https://github.com/fenyan5312/magpie-wpt)），本 fork 的改动 © 2026 iazhan。

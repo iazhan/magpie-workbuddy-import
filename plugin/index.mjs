@@ -1,4 +1,4 @@
-// WorkBuddy 粘贴登录 —— 在社区插件的登录方式后面追加一个，不替换它。
+// WorkBuddy 凭据导入 —— 在社区插件的登录方式后面追加一个，不替换它。
 //
 // magpie 一个供应商只能由一个插件服务（serving），而且「其他登录方式」里
 // 能看到的，就是那个插件给出的全部方式。所以想要四种方式同时在，不能各
@@ -6,7 +6,7 @@
 // 交出去。
 //
 // 这里做的就是这个：加载社区插件，拿它原样返回的 config / provider /
-// auth，只在 auth.methods 末尾追加「粘贴凭据登录」。
+// auth，只在 auth.methods 末尾追加「导入凭据」。
 //
 // 社区插件和本插件装在 magpie 的同一个 plugins/node_modules 里，所以从本插件
 // 自己的位置往上找它就是最可靠的（community.mjs）；配置文件在哪、HOME 是
@@ -14,7 +14,7 @@
 
 import { findCommunity } from "./community.mjs";
 
-const LABEL = "粘贴凭据登录";
+const LABEL = "导入凭据";
 
 export const WorkBuddyPasteLogin = async (ctx) => {
   const make = await findCommunity();

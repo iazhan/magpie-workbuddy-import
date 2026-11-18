@@ -1,6 +1,6 @@
-# magpie-wpt-import
+# magpie-workbuddy-import-plugin
 
-在 magpie 的 WorkBuddy 登录方式里追加一个「粘贴凭据登录」，同时保留社区插件原有的
+在 magpie 的 WorkBuddy 登录方式里追加一个「导入凭据」，同时保留社区插件原有的
 browser / desktop / API key 三种方式。
 
 > **仅供交流学习与逆向研究使用。** 本项目只做本地凭据格式转换与登录，不含任何绕过、
@@ -21,7 +21,7 @@ magpie plugin use ./plugin workbuddy
 
 ## 支持的输入
 
-粘贴窗口接受下列任一形态，不再只认 JSON：
+导入窗口接受下列任一形态，不再只认 JSON：
 
 | 形态 | 例子 |
 |---|---|
@@ -67,4 +67,4 @@ magpie plugin use @magpie-community/opencode-workbuddy-auth@latest workbuddy
 
 ## 许可
 
-MIT。
+MIT。原项目 © 2026 fenyan5312（[magpie-wpt](https://github.com/fenyan5312/magpie-wpt)），本 fork 的改动 © 2026 iazhan。
