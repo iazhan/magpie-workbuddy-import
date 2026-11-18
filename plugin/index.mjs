@@ -8,66 +8,16 @@
 // 这里做的就是这个：加载社区插件，拿它原样返回的 config / provider /
 // auth，只在 auth.methods 末尾追加「粘贴凭据登录」。
 //
-// 社区插件在 magpie 的插件目录里，跟着 magpie 更新；这里按模块名解析，
-// 不写死路径。装过社区插件之后它就在 ~/.config/magpie/plugins/node_modules。
+// 社区插件和本插件装在 magpie 的同一个 plugins/node_modules 里，所以从本插件
+// 自己的位置往上找它就是最可靠的（community.mjs）；配置文件在哪、HOME 是
+// 什么，都不影响。容器里那条路尤其不能按 ~/.config/magpie 猜。
 
-import { homedir } from "node:os";
-import { join } from "node:path";
-import { pathToFileURL } from "node:url";
-
-const COMMUNITY = "@magpie-community/opencode-workbuddy-auth";
+import { findCommunity } from "./community.mjs";
 
 const LABEL = "粘贴凭据登录";
 
-/** Where magpie installs community plugins. */
-function communityDir() {
-  const base = process.env.MAGPIE_CONFIG_DIR || join(homedir(), ".config", "magpie");
-  return join(base, "plugins", "node_modules", COMMUNITY, "index.mjs");
-}
-
-/**
- * The community plugin's factory.
- *
- * Tried by name first (a shared node_modules), then from magpie's own plugin
- * folder, which is where `magpie plugin add` puts it. No path is assumed: the
- * folder follows MAGPIE_CONFIG_DIR, so another install is another path.
- */
-async function community() {
-  const tries = [COMMUNITY, pathToFileURL(communityDir()).href];
-  let mod;
-  for (const spec of tries) {
-    try {
-      const m = await import(spec);
-      // The package's "." export points at OpenCode 2's opencode2.mjs, which
-      // has no WorkBuddyAuthPlugin; the factory lives in index.mjs, reached
-      // by path. Take the first module that actually exports the factory,
-      // not the first one that merely imports: breaking on opencode2.mjs
-      // made this plugin fail to load at all (社区插件 0.2.20).
-      if (typeof m?.WorkBuddyAuthPlugin === "function") {
-        mod = m;
-        break;
-      }
-    } catch {}
-  }
-
-  if (!mod) {
-    throw new Error(
-      [
-        `找不到社区插件 ${COMMUNITY} 的 WorkBuddyAuthPlugin 导出。`,
-        "",
-        "先装它（或升级到能导出该工厂的版本），本插件是挂在它上面的：",
-        `  magpie plugin add ${COMMUNITY}`,
-        "",
-        "装好之后再 magpie plugin add 本插件。",
-      ].join("\n")
-    );
-  }
-
-  return mod.WorkBuddyAuthPlugin;
-}
-
 export const WorkBuddyPasteLogin = async (ctx) => {
-  const make = await community();
+  const make = await findCommunity();
   const hooks = await make(ctx);
 
   // Nothing is replaced: the browser, desktop and API-key methods stay exactly
