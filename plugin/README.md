@@ -8,16 +8,11 @@ browser / desktop / API key 三种方式。
 
 ## 安装
 
-包在仓库根目录，从 npm 或从仓库装都可以：
-
 ```bash
-# 从 npm：依赖 @magpie-community/opencode-workbuddy-auth 会自动带上
-magpie plugin add magpie-workbuddy-import
-
-# 或从仓库：先装依赖（magpie 不替目录装），再装仓库根目录
-npm install
-magpie plugin add .
+magpie plugin add github:iazhan/magpie-workbuddy-import
 ```
+
+依赖 `@magpie-community/opencode-workbuddy-auth` 随这次安装拉下来。改本地代码时，先 `npm install` 再 `magpie plugin add .`（按目录装时 magpie 不替目录装依赖）。
 
 装完 magpie 会把 `workbuddy` 交给它服务（输出里写 `served by …`）；没接管的话再补 `magpie plugin use magpie-workbuddy-import workbuddy`。
 

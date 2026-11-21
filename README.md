@@ -55,20 +55,20 @@ return {
 
 ## 安装
 
-从 npm：
+直接从仓库装：
 
 ```bash
-magpie plugin add magpie-workbuddy-import
+magpie plugin add github:iazhan/magpie-workbuddy-import
 ```
 
-依赖 `@magpie-community/opencode-workbuddy-auth` 会随包装上（`^0.2.20`，需要它导出的 `WorkBuddyAuthPlugin`）。已经装过就复用。
+依赖 `@magpie-community/opencode-workbuddy-auth`（`^0.2.20`，需要它导出的 `WorkBuddyAuthPlugin`）由这次安装一并拉下来，已经装过就复用。
 
-从仓库（改了代码、还没发版）：
+本地改代码：
 
 ```bash
 git clone https://github.com/iazhan/magpie-workbuddy-import.git
 cd magpie-workbuddy-import
-npm install          # 必须：magpie 不替目录装依赖，少了这步插件起不来
+npm install          # 必须：按目录装时 magpie 不替目录装依赖，少了这步插件起不来
 magpie plugin add .
 ```
 
@@ -81,6 +81,12 @@ magpie plugin use magpie-workbuddy-import workbuddy
 ```
 
 装好后 `magpie plugin list` 能看到，四种方式都在。
+
+## magpie 怎么发现它
+
+仓库打了 `magpie-plugin` topic，magpie 每十分钟问一次 GitHub，它出现在 **Plugins → Discover → Unofficial, on GitHub**：按 star 排序，标注「reviewed by no one」。
+
+不发 npm、也不进 `magpie-community/plugins` 的 `registry.json`。那条路要 PR、要过审，还得维护一个和社区包同通道的条目；这条不用。代价是**只在这一栏里**：Plugins 的搜索框走 npm，搜不到它，只能翻列表或直接 `plugin add`。
 
 ## 用法
 
