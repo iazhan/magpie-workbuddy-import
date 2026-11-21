@@ -1,6 +1,6 @@
 # magpie-workbuddy-import · WorkBuddy 凭据导入
 
-> 本仓库 fork 自 [fenyan5312/magpie-wpt](https://github.com/fenyan5312/magpie-wpt)：定位从「粘贴登录」改成「凭据导入」，并修好了容器里找不到社区插件的问题。上游原样保留 MIT 许可。
+> 本仓库源自 [fenyan5312/magpie-wpt](https://github.com/fenyan5312/magpie-wpt)：定位从「粘贴登录」改成「凭据导入」，并修好了容器里找不到社区插件的问题。上游原样保留 MIT 许可。
 
 把 WorkBuddy 的凭据（JSON、Cookie、请求头或 API key）导入 magpie 的登录方式里——凭据已经在手上时，不走浏览器，在插件自己开的窗口里粘进去或手动输入都行，不依赖剪贴板。
 
@@ -47,28 +47,38 @@ return {
 
 社区插件的三个方式原样保留，第四个追加在后面。两者是同一个插件交出去的，所以都在。
 
+**和已收录的社区包是什么关系：** 同一个 provider id（`workbuddy`）、同一个上游，装的是同一个 `@magpie-community/opencode-workbuddy-auth`。区别只有登录路径——社区包提供浏览器、桌面端、API Key 三种，这里多一条「把已经拿到的凭据粘进来」，不走浏览器、不读剪贴板。它不是替代品：社区包必须存在，本包加载它、在它的 `auth.methods` 末尾追加；改由本包服务之后，前三种方式一个都不少。
+
 依赖：`@magpie-community/opencode-workbuddy-auth`（wb 的登录本来就要装它）。没装的话插件会明确报出来，并给出安装命令。
 
 它在哪都能找到它：magpie 把所有插件装进同一个 `plugins/node_modules`，本插件就从**自己所在的位置**往上找那个邻居，不看 `HOME`、也不猜 `~/.config`。容器里尤其要这样——官方镜像的 magpie 目录是 `$XDG_CONFIG_HOME/magpie`（`/config/magpie`），而 `HOME` 是 `/config/home`，按 `~/.config` 猜会猜到一个空目录，于是报“找不到 WorkBuddyAuthPlugin 导出”。万一还是找不到，报错会列出找过的每个路径和原因（没装 / 装了但这个版本没有该导出）。
 
 ## 安装
 
+从 npm：
+
+```bash
+magpie plugin add magpie-workbuddy-import
+```
+
+依赖 `@magpie-community/opencode-workbuddy-auth` 会随包装上（`^0.2.20`，需要它导出的 `WorkBuddyAuthPlugin`）。已经装过就复用。
+
+从仓库（改了代码、还没发版）：
+
 ```bash
 git clone https://github.com/iazhan/magpie-workbuddy-import.git
 cd magpie-workbuddy-import
-magpie plugin add ./plugin
-magpie plugin use ./plugin workbuddy
+npm install          # 必须：magpie 不替目录装依赖，少了这步插件起不来
+magpie plugin add .
 ```
 
-从 npm 装（发版之后）：
+仓库根目录就是包本身，`main` 指向 `./plugin/index.mjs`；`plugin/` 里那份 `package.json` 只用来让这个目录能单独被加载，标了 `private`，不单独发布。
+
+`plugin add` 之后 magpie 一般已经让它接管 `workbuddy`，输出里会写 `served by <路径>`。若那里仍显示社区插件在服务，再补一次：
 
 ```bash
-magpie plugin add @magpie-community/opencode-workbuddy-auth@latest
-magpie plugin add magpie-workbuddy-import
 magpie plugin use magpie-workbuddy-import workbuddy
 ```
-
-`plugin use` 那一步是必须的：它让这个包装插件来服务 `workbuddy`（从而把四种方式一起交出去）。已经装过社区插件的话，它仍然会被加载，只是不再由它来服务。
 
 装好后 `magpie plugin list` 能看到，四种方式都在。
 
@@ -167,8 +177,10 @@ POST https://copilot.tencent.com/v2/plugin/auth/token/refresh
 ## 卸载
 
 ```bash
-magpie plugin rm ./plugin
+magpie plugin rm magpie-workbuddy-import
 ```
+
+从目录装的 `plugin rm` 认不出来（它只按包名查已安装的包），删掉 `plugins.json` 里 `"spec": "<路径>"` 那一条再 `magpie plugin list` 让它重算；图形界面里删也是一样。
 
 如果想让社区插件重新服务 `workbuddy`：
 

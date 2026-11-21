@@ -31,6 +31,7 @@ test("找到同一个 node_modules 里的社区插件", (t) => {
 test("本插件再深一层也找得到", (t) => {
   const p = tree();
   t.after(() => rmSync(p.root, { recursive: true, force: true }));
+  // 0.1.0 时装在旧目录名 magpie-workbuddy-import-plugin 下，升级后仍然要能找到邻居
   const deeper = join(p.mods, "magpie-workbuddy-import-plugin", "plugin");
   mkdirSync(deeper, { recursive: true });
   writeFileSync(join(p.theirs, "index.mjs"), "export const WorkBuddyAuthPlugin = 1\n");

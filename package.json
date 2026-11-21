@@ -1,7 +1,7 @@
 {
   "name": "magpie-workbuddy-import",
-  "version": "0.1.0",
-  "description": "把 WorkBuddy 的凭据（JSON / Cookie / 请求头 / API key）导入 magpie 的登录方式里（仅供交流学习与逆向研究使用）",
+  "version": "0.2.0",
+  "description": "Paste a WorkBuddy credential into magpie: a fourth sign-in method for the workbuddy provider, with the browser, desktop and API-key ones kept.",
   "type": "module",
   "main": "./plugin/index.mjs",
   "scripts": {
@@ -10,18 +10,23 @@
   "engines": {
     "node": ">=18"
   },
-  "files": [
-    "plugin",
-    "README.md",
-    "LICENSE"
-  ],
   "keywords": [
+    "opencode",
+    "opencode-plugin",
     "magpie",
     "magpie-plugin",
     "workbuddy",
     "codebuddy",
     "credential",
     "import"
+  ],
+  "dependencies": {
+    "@magpie-community/opencode-workbuddy-auth": "^0.2.20"
+  },
+  "files": [
+    "plugin",
+    "README.md",
+    "LICENSE"
   ],
   "license": "MIT",
   "repository": {
@@ -31,5 +36,13 @@
   "homepage": "https://github.com/iazhan/magpie-workbuddy-import#readme",
   "bugs": {
     "url": "https://github.com/iazhan/magpie-workbuddy-import/issues"
+  },
+  "magpie": {
+    "name": "WorkBuddy 凭据导入",
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNUI4REVGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMkE1RkNDIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMiIgeT0iMiIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiByeD0iMTQiIGZpbGw9InVybCgjZykiLz48cGF0aCBkPSJNMzIgMTN2MTkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjMgMjVsOSA5IDktOSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNiA0MXY0YTUgNSAwIDAgMCA1IDVoMjJhNSA1IDAgMCAwIDUtNXYtNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==",
+    "summary": {
+      "en": "Import a WorkBuddy credential you already have: paste JSON, a Cookie, a request header or an API key into the plugin's own window, and it refreshes the token once before saving. The community plugin's browser, desktop and API-key methods stay as they are.",
+      "zh": "把已有的 WorkBuddy 凭据导入 magpie：JSON、Cookie、请求头或 API Key 粘进插件自己开的窗口，保存前先真的刷新一次 token。社区插件的浏览器、桌面端、API Key 三种方式原样保留。"
+    }
   }
 }

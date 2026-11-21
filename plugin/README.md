@@ -1,4 +1,4 @@
-# magpie-workbuddy-import-plugin
+# magpie-workbuddy-import
 
 在 magpie 的 WorkBuddy 登录方式里追加一个「导入凭据」，同时保留社区插件原有的
 browser / desktop / API key 三种方式。
@@ -8,16 +8,20 @@ browser / desktop / API key 三种方式。
 
 ## 安装
 
-```bash
-# 依赖：社区插件（WorkBuddy 的登录本来就来自它）
-magpie plugin add @magpie-community/opencode-workbuddy-auth@latest
+包在仓库根目录，从 npm 或从仓库装都可以：
 
-# 本插件，并让它服务 workbuddy
-magpie plugin add ./plugin
-magpie plugin use ./plugin workbuddy
+```bash
+# 从 npm：依赖 @magpie-community/opencode-workbuddy-auth 会自动带上
+magpie plugin add magpie-workbuddy-import
+
+# 或从仓库：先装依赖（magpie 不替目录装），再装仓库根目录
+npm install
+magpie plugin add .
 ```
 
-`magpie plugin use` 是必须的：只有服务 `workbuddy` 的插件才能把四种登录方式一起交出去。
+装完 magpie 会把 `workbuddy` 交给它服务（输出里写 `served by …`）；没接管的话再补 `magpie plugin use magpie-workbuddy-import workbuddy`。
+
+本目录的 `package.json` 标了 `"private": true`，只用来让这个目录能被单独加载；发布以仓库根目录的清单为准。
 
 ## 支持的输入
 
@@ -59,7 +63,7 @@ config / provider / auth，只在 `auth.methods` 末尾追加第四种方式。
 ## 卸载
 
 ```bash
-magpie plugin rm ./plugin
+magpie plugin rm magpie-workbuddy-import
 magpie plugin use @magpie-community/opencode-workbuddy-auth@latest workbuddy
 ```
 

@@ -1,36 +1,8 @@
 {
-  "name": "magpie-workbuddy-import-plugin",
-  "version": "0.1.0",
-  "description": "把 WorkBuddy 的凭据（JSON / Cookie / 请求头 / API key）导入 magpie 的登录方式里（仅供交流学习与逆向研究使用）",
+  "name": "magpie-workbuddy-import",
+  "version": "0.2.0",
+  "private": true,
   "type": "module",
   "main": "./index.mjs",
-  "exports": "./index.mjs",
-  "files": [
-    "index.mjs",
-    "community.mjs",
-    "paste.mjs",
-    "auth-store.js",
-    "README.md"
-  ],
-  "engines": {
-    "node": ">=18"
-  },
-  "keywords": [
-    "magpie",
-    "magpie-plugin",
-    "workbuddy",
-    "codebuddy",
-    "credential",
-    "import"
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/iazhan/magpie-workbuddy-import.git",
-    "directory": "plugin"
-  },
-  "homepage": "https://github.com/iazhan/magpie-workbuddy-import#readme",
-  "bugs": {
-    "url": "https://github.com/iazhan/magpie-workbuddy-import/issues"
-  }
+  "exports": "./index.mjs"
 }
